@@ -32,9 +32,10 @@ public class GameActivity extends Activity {
                 R.drawable.bullet_award,
                 R.drawable.pause1,
                 R.drawable.pause2,
-                R.drawable.bomb
+                R.drawable.bomb,
+                R.drawable.user_center
         };
-        gameView.start(bitmapIds);
+        gameView.start(bitmapIds, GameActivity.this);
     }
 
     @Override

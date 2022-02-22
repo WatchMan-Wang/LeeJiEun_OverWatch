@@ -10,10 +10,14 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.text.TextPaint;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 
+import com.edam.iu.plane.GameActivity;
 import com.edam.iu.plane.R;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ import java.util.List;
 
 public class GameView extends View {
 
+    private static final String TAG = "LeeJiEun";
     private Paint paint;
     private Paint textPaint;
     private CombatAircraft combatAircraft = null;
@@ -55,6 +60,9 @@ public class GameView extends View {
     private long touchUpTime = -1;//触点弹起的时刻
     private float touchX = -1;//触点的x坐标
     private float touchY = -1;//触点的y坐标
+    private float canvasWidth = 0;
+    GameActivity gameActivity;
+
 
     public GameView(Context context) {
         super(context);
@@ -88,10 +96,12 @@ public class GameView extends View {
         borderSize *= density;
     }
 
-    public void start(int[] bitmapIds){
+    public void start(int[] bitmapIds, GameActivity gameActivity){
+        this.gameActivity = gameActivity;
         destroy();
         for(int bitmapId : bitmapIds){
             Bitmap bitmap = BitmapFactory.decodeResource(getResources(), bitmapId);
+            Log.d(TAG, String.valueOf(bitmapId));
             bitmaps.add(bitmap);
         }
         startWhenBitmapsReady();
@@ -136,6 +146,14 @@ public class GameView extends View {
 
         super.onDraw(canvas);
 
+        // TODO 绘制右上角的设置中心按钮
+        Bitmap userCenterBitmap = bitmaps.get(12);
+        RectF userCenterBitmapDstRecf = getUserCenterBitmapDstRecF();
+        float userCenterLeft = userCenterBitmapDstRecf.left;
+        float userCenterTop = 15 * density;
+        Log.d(TAG, "userCenterLeft: " + String.valueOf(userCenterLeft) + " userCenterTop: " + String.valueOf(userCenterTop));
+        canvas.drawBitmap(userCenterBitmap, userCenterLeft, userCenterTop, paint);
+
         if(status == STATUS_GAME_STARTED){
             drawGameStarted(canvas);
         }else if(status == STATUS_GAME_PAUSED){
@@ -150,6 +168,7 @@ public class GameView extends View {
 
         drawScoreAndBombs(canvas);
 
+        canvasWidth = canvas.getWidth();
         //第一次绘制时，将战斗机移到Canvas最下方，在水平方向的中心
         if(frame == 0){
             float centerX = canvas.getWidth() / 2;
@@ -285,7 +304,8 @@ public class GameView extends View {
         canvas.translate(0, h2);
         canvas.drawLine(0, 0, w2, 0, paint);
 
-        //绘制实际的分数 TODO 可以实现本地缓存分数
+        //绘制实际的分数
+        // TODO 可以实现本地缓存分数
         String allScore = String.valueOf(getScore());
         canvas.drawText(allScore, w2 / 2, (h3 - fontSize2) / 2 + fontSize2, textPaint);
         //绘制分数下面的横线
@@ -312,6 +332,7 @@ public class GameView extends View {
         textPaint.setTextAlign(originalFontAlign);
         paint.setColor(originalColor);
         paint.setStyle(originalStyle);
+
     }
 
     //绘制左上角的得分和左下角炸弹的数量
@@ -321,7 +342,9 @@ public class GameView extends View {
         RectF pauseBitmapDstRecF = getPauseBitmapDstRecF();
         float pauseLeft = pauseBitmapDstRecF.left;
         float pauseTop = pauseBitmapDstRecF.top;
+        Log.d(TAG, "pauseLeft: " + String.valueOf(pauseLeft) + " pauseTop: " + String.valueOf(pauseTop));
         canvas.drawBitmap(pauseBitmap, pauseLeft, pauseTop, paint);
+
         //绘制左上角的总得分数
         float scoreLeft = pauseLeft + pauseBitmap.getWidth() + 20 * density;
         float scoreTop = fontSize + pauseTop + pauseBitmap.getHeight() / 2 - fontSize / 2;
@@ -530,23 +553,47 @@ public class GameView extends View {
                 //单击了暂停按钮
                 pause();
             }
+            if(isClickUserCenter(x, y)){
+                //单击了用户中心
+                Log.d(TAG, "pauseBtnX: " + String.valueOf(x) + "pauseBtnY: " + String.valueOf(y));
+                pause();
+                // TODO openTapSDKSuite
+                Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
+            }
         }else if(status == STATUS_GAME_PAUSED){
             if(isClickContinueButton(x, y)){
                 //单击了“继续”按钮
                 resume();
+            }
+            if(isClickUserCenter(x, y)){
+                // TODO openTapSDKSuite
+                Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
             }
         }else if(status == STATUS_GAME_OVER){
             if(isClickRestartButton(x, y)){
                 //单击了“重新开始”按钮
                 restart();
             }
+            if(isClickUserCenter(x, y)){
+                // TODO openTapSDKSuite
+                View contentView = LayoutInflater.from(gameActivity).inflate(R.layout.pop_menu,null);
+
+                Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
+            }
         }
     }
+
 
     //是否单击了左上角的暂停按钮
     private boolean isClickPause(float x, float y){
         RectF pauseRecF = getPauseBitmapDstRecF();
         return pauseRecF.contains(x, y);
+    }
+
+    //是否点击了右上角用户中心按钮
+    private boolean isClickUserCenter(float x, float y){
+        RectF userCenterRecF = getUserCenterBitmapDstRecF();
+        return userCenterRecF.contains(x, y);
     }
 
     //是否单击了暂停状态下的“继续”那妞
@@ -566,6 +613,17 @@ public class GameView extends View {
         recF.top = 15 * density;
         recF.right = recF.left + pauseBitmap.getWidth();
         recF.bottom = recF.top + pauseBitmap.getHeight();
+        Log.d(TAG, "pauseBitmap.getWidth: " + String.valueOf(pauseBitmap.getWidth()));
+        return recF;
+    }
+
+    private RectF getUserCenterBitmapDstRecF(){
+        Bitmap userCenterBitmap = bitmaps.get(12);
+        RectF recF = new RectF();
+        recF.left = canvasWidth - 15 * density - userCenterBitmap.getWidth();
+        recF.top = 15 * density;
+        recF.right = recF.left + userCenterBitmap.getWidth();
+        recF.bottom = recF.top + userCenterBitmap.getHeight();
         return recF;
     }
 

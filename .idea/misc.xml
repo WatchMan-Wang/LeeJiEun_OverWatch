@@ -5,8 +5,10 @@
       <map>
         <entry key="app/src/main/res/drawable/button_shape.xml" value="0.24351851851851852" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.21944444444444444" />
+        <entry key="app/src/main/res/drawable/menu_pop_bg.xml" value="0.2824074074074074" />
         <entry key="app/src/main/res/layout/activity_game.xml" value="0.2135258358662614" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2135258358662614" />
+        <entry key="app/src/main/res/layout/pop_menu.xml" value="0.25905797101449274" />
       </map>
     </option>
   </component>
