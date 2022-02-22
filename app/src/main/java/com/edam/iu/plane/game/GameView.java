@@ -1,5 +1,6 @@
 package com.edam.iu.plane.game;
 
+import android.app.ActionBar;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
@@ -11,9 +12,11 @@ import android.graphics.RectF;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.PopupWindow;
 import android.widget.Toast;
 
 
@@ -61,6 +64,7 @@ public class GameView extends View {
     private float touchX = -1;//触点的x坐标
     private float touchY = -1;//触点的y坐标
     private float canvasWidth = 0;
+    private float canvasHeight = 0;
     GameActivity gameActivity;
 
 
@@ -154,6 +158,7 @@ public class GameView extends View {
         Log.d(TAG, "userCenterLeft: " + String.valueOf(userCenterLeft) + " userCenterTop: " + String.valueOf(userCenterTop));
         canvas.drawBitmap(userCenterBitmap, userCenterLeft, userCenterTop, paint);
 
+
         if(status == STATUS_GAME_STARTED){
             drawGameStarted(canvas);
         }else if(status == STATUS_GAME_PAUSED){
@@ -169,6 +174,7 @@ public class GameView extends View {
         drawScoreAndBombs(canvas);
 
         canvasWidth = canvas.getWidth();
+        canvasHeight = canvas.getHeight();
         //第一次绘制时，将战斗机移到Canvas最下方，在水平方向的中心
         if(frame == 0){
             float centerX = canvas.getWidth() / 2;
@@ -576,7 +582,12 @@ public class GameView extends View {
             }
             if(isClickUserCenter(x, y)){
                 // TODO openTapSDKSuite
-                View contentView = LayoutInflater.from(gameActivity).inflate(R.layout.pop_menu,null);
+                View contentView = LayoutInflater.from(gameActivity).inflate(R.layout.pop_menu,null, false);
+                PopupWindow userCenterPopupWindow = new PopupWindow(contentView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+                userCenterPopupWindow.setOutsideTouchable(true);
+                userCenterPopupWindow.setTouchable(true);
+                int contentViewWidth = userCenterPopupWindow.getContentView().getMeasuredWidth();
+                userCenterPopupWindow.showAsDropDown(GameView.this, Math.round(canvasWidth / 2), Math.round(- canvasHeight + 4 * getUserCenterBitmapDstRecF().top));
 
                 Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
             }

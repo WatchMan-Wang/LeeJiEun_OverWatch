@@ -4,27 +4,23 @@
               android:layout_width="match_parent"
               android:layout_height="match_parent"
               android:background="@drawable/menu_pop_bg"
-              android:padding="10dp"
-    >
+              android:padding="10dp">
   <LinearLayout
       android:id="@+id/menu1"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
-      android:gravity="center"
-      >
+      android:gravity="center">
       <ImageView
-          android:layout_width="25dp"
-          android:layout_height="25dp"
-          android:src="@drawable/tapsdk_suite_ic_achievement_default"
-          />
+          android:layout_width="30dp"
+          android:layout_height="30dp"
+          android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="@android:color/darker_gray"
           android:text="Item 菜单1"
-          android:layout_marginLeft="10dp"
-          />
+          android:layout_marginLeft="10dp"/>
   </LinearLayout>
     <LinearLayout
         android:id="@+id/menu2"
@@ -32,20 +28,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/tapsdk_suite_ic_achievement_default"
-            />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
             android:text="Item 菜单2"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/menu3"
@@ -53,20 +46,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/tapsdk_suite_ic_achievement_default"
-            />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
             android:text="Item 菜单3"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_marginLeft="10dp" />
     </LinearLayout>
     <LinearLayout
         android:id="@+id/menu4"
@@ -74,20 +64,17 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/tapsdk_suite_ic_achievement_default"
-            />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
             android:text="Item 菜单4"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <LinearLayout
         android:id="@+id/menu5"
@@ -95,19 +82,16 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:gravity="center"
-        android:layout_marginTop="10dp"
-        >
+        android:layout_marginTop="10dp">
         <ImageView
-            android:layout_width="25dp"
-            android:layout_height="25dp"
-            android:src="@drawable/tapsdk_suite_ic_achievement_default"
-            />
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
             android:text="Item 菜单5"
-            android:layout_marginLeft="10dp"
-            />
+            android:layout_marginLeft="10dp"/>
     </LinearLayout>
 </LinearLayout>
