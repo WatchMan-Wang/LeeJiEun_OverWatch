@@ -256,6 +256,11 @@ public class GameActivity extends Activity implements View.OnClickListener {
                 // process rankings
                 for (LCRanking r:rankings) {
                     Log.d(TAG+"RANK", String.valueOf(r.getRank()));
+                    Log.d(TAG+"RANK", String.valueOf(r.getUser().getObjectId()));
+                    Log.d(TAG+"RANK", String.valueOf(r.getUser().get("name")));
+                    Log.d(TAG+"RANK", String.valueOf(r.getUser().get("avatar")));
+                    // TODO 根据 objectId 得到用户的 name、avatar 属性
+
                 }
             }
 

@@ -1,18 +1,15 @@
 package com.edam.iu.plane;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.webkit.WebView;
@@ -21,7 +18,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.edam.iu.plane.game.GameView;
 import com.edam.iu.plane.tools.StatusBarUtil;
 import com.tapsdk.antiaddiction.config.AntiAddictionFunctionConfig;
 import com.tapsdk.antiaddiction.constants.Constants;
@@ -31,7 +27,6 @@ import com.tapsdk.bootstrap.Callback;
 import com.tapsdk.bootstrap.TapBootstrap;
 import com.tapsdk.bootstrap.account.TDSUser;
 import com.tapsdk.bootstrap.exceptions.TapError;
-import com.tapsdk.moment.TapMoment;
 import com.taptap.sdk.TapLoginHelper;
 import com.tds.common.entities.TapConfig;
 import com.tds.common.entities.TapDBConfig;
@@ -54,11 +49,15 @@ public class MainActivity extends AppCompatActivity {
     private String userID = "";
     TDSUser currentUser = null;
     String userIdentifier = "";
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        sp = getPreferences(Context.MODE_PRIVATE);
+        editor = sp.edit();
 
         initStatusBar();
 
@@ -85,7 +84,12 @@ public class MainActivity extends AppCompatActivity {
         btnInGame.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                enterGame();
+                // 判定是否认证过，因为不检查，TapTap 未实名认证，调转认证时杀死游戏进程，重新启动游戏判定已经登陆过，则直接进入游戏。
+                // 这是逻辑上的 Bug。所以，这里需要处理下。
+                // 方案一：sp 缓存用户唯一标识，这里不进入游戏，而是进行实名认证。认证通过后可以游戏则进入游戏
+                // TODO
+                userIdentifier = sp.getString("USERIDENTIFIER", "");
+                tapAntiAddiction(userIdentifier);
             }
         });
 
@@ -150,10 +154,6 @@ public class MainActivity extends AppCompatActivity {
                                 Log.d(TAG, "防沉迷的登出");
                                 Toast.makeText(MainActivity.this, "防沉迷的登出", Toast.LENGTH_SHORT).show();
                                 break;
-                            case Constants.ANTI_ADDICTION_CALLBACK_CODE.OPEN_ALERT_TIP:
-                                Log.d(TAG, "防沉迷未成年允许游戏弹窗");
-                                Toast.makeText(MainActivity.this, "防沉迷未成年允许游戏弹窗", Toast.LENGTH_SHORT).show();
-                                break;
                             case Constants.ANTI_ADDICTION_CALLBACK_CODE.NIGHT_STRICT:
                                 Log.d(TAG, "防沉迷未成年玩家无法进行游戏");
                                 Toast.makeText(MainActivity.this, "防沉迷未成年玩家无法进行游戏", Toast.LENGTH_SHORT).show();
@@ -161,6 +161,7 @@ public class MainActivity extends AppCompatActivity {
                             case Constants.ANTI_ADDICTION_CALLBACK_CODE.REAL_NAME_STOP:
                                 Log.d(TAG, "防沉迷实名认证过程中点击了关闭实名窗");
                                 Toast.makeText(MainActivity.this, "防沉迷实名认证过程中点击了关闭实名窗", Toast.LENGTH_SHORT).show();
+//                                System.exit(0);
                                 break;
                             case Constants.ANTI_ADDICTION_CALLBACK_CODE.SWITCH_ACCOUNT:
                                 Log.d(TAG, "防沉迷实名认证过程中点击了切换账号按钮");
@@ -172,7 +173,7 @@ public class MainActivity extends AppCompatActivity {
         );
     }
 
-    private void tapAntiAddiction() {
+    private void tapAntiAddiction(String userIdentifier) {
         if (userIdentifier == "") {
             Toast.makeText(MainActivity.this, "用户唯一标识为空，检查 Tap 授权", Toast.LENGTH_SHORT).show();
             return;
@@ -199,9 +200,11 @@ public class MainActivity extends AppCompatActivity {
                 Log.d(TAG, "unionid:" + taptapAuthData.get("unionid").toString());
                 Log.d(TAG, "openid:" + taptapAuthData.get("openid").toString());
                 userIdentifier = taptapAuthData.get("openid").toString();
+                editor.putString("USERIDENTIFIER", userIdentifier)
+                        .commit();
                 Toast.makeText(MainActivity.this, "succeed to login with Taptap.", Toast.LENGTH_SHORT).show();
 
-                tapAntiAddiction();
+                tapAntiAddiction(userIdentifier);
             }
 
             @Override
