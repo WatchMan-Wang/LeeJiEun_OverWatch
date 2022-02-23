@@ -6,7 +6,7 @@
               android:background="@drawable/menu_pop_bg"
               android:padding="10dp">
   <LinearLayout
-      android:id="@+id/menu1"
+      android:id="@+id/tapsdk_moment"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:orientation="horizontal"
@@ -14,16 +14,16 @@
       <ImageView
           android:layout_width="30dp"
           android:layout_height="30dp"
-          android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
+          android:src="@drawable/tapsdk_suite_ic_moment_default"/>
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="@android:color/darker_gray"
-          android:text="Item 菜单1"
+          android:text="内嵌动态"
           android:layout_marginLeft="10dp"/>
   </LinearLayout>
     <LinearLayout
-        android:id="@+id/menu2"
+        android:id="@+id/tapsdk_achievement"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -32,16 +32,16 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
+            android:src="@drawable/tapsdk_suite_ic_leadboard_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
-            android:text="Item 菜单2"
+            android:text="成就系统"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/menu3"
+        android:id="@+id/tapsdk_leaderboard"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -50,12 +50,12 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
+            android:src="@drawable/tapsdk_suite_ic_achievement_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
-            android:text="Item 菜单3"
+            android:text="云排行榜"
             android:layout_marginLeft="10dp" />
     </LinearLayout>
     <LinearLayout
@@ -68,7 +68,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
+            android:src="@drawable/tapsdk_suite_ic_achievement_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -77,7 +77,7 @@
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
     <LinearLayout
-        android:id="@+id/menu5"
+        android:id="@+id/tap_logout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
@@ -86,12 +86,12 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@mipmap/tapsdk_suite_ic_achievement_default"/>
+            android:src="@drawable/tap_logout"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="@android:color/darker_gray"
-            android:text="Item 菜单5"
+            android:text="退出游戏"
             android:layout_marginLeft="10dp"/>
     </LinearLayout>
 </LinearLayout>

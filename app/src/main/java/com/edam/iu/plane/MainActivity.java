@@ -121,24 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         TapBootstrap.init(MainActivity.this, tapConfig);
 
-        // 注册动态回调监听
-        TapMoment.setCallback(new TapMoment.TapMomentCallback() {
-            @Override
-            public void onCallback(int code, String msg) {
-                if (code == TapMoment.CALLBACK_CODE_GET_NOTICE_SUCCESS) {
-                    // 获取用户新消息成功
-                    Toast.makeText(MainActivity.this, "获取新通知数据为： " + msg, Toast.LENGTH_SHORT).show();
-                }
-                if (code == TapMoment.CALLBACK_CODE_LOGIN_SUCCESS) {
-                    // 动态内登陆成功
-                    Toast.makeText(MainActivity.this, "动态内登陆成功： " + msg, Toast.LENGTH_SHORT).show();
-                }
-                if (code == TapMoment.CALLBACK_CODE_PUBLISH_SUCCESS) {
-                    // 动态发布成功
-                    Toast.makeText(MainActivity.this, "动态发布成功： " + msg, Toast.LENGTH_SHORT).show();
-                }
-            }
-        });
+
 
         // Android SDK 的各接口第一个参数是当前 Activity，以下不再说明
         String gameIdentifier = "FwFdCIr6u71WQDQwQN";

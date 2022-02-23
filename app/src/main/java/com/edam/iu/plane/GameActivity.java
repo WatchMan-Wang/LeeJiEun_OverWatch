@@ -1,16 +1,52 @@
 package com.edam.iu.plane;
 
 import android.app.Activity;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.widget.LinearLayout;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
 
 import com.edam.iu.plane.game.GameView;
 import com.edam.iu.plane.tools.StatusBarUtil;
+import com.tapsdk.antiaddictionui.AntiAddictionUIKit;
+import com.tapsdk.bootstrap.account.TDSUser;
+import com.tapsdk.moment.TapMoment;
+import com.tds.achievement.AchievementCallback;
+import com.tds.achievement.AchievementException;
+import com.tds.achievement.TapAchievement;
+import com.tds.achievement.TapAchievementBean;
+
+import org.jetbrains.annotations.NotNull;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import cn.leancloud.LCLeaderboard;
+import cn.leancloud.LCLeaderboardResult;
+import cn.leancloud.LCRanking;
+import cn.leancloud.LCStatisticResult;
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
 
 
-public class GameActivity extends Activity {
+public class GameActivity extends Activity implements View.OnClickListener {
 
+    private static final String TAG = "LeeJiEun";
     private GameView gameView;
+    private LinearLayout tapAchievement;
+    private LinearLayout tapMoment;
+    private LinearLayout tapCloudLeaderboard;
+    private LinearLayout tapMenu4;
+    private LinearLayout tapLogout;
+    private SharedPreferences sp;
+    private TDSUser currentUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,8 +54,17 @@ public class GameActivity extends Activity {
         setContentView(R.layout.activity_game);
 
         initStatusBar();
-
+        sp = getPreferences(Context.MODE_PRIVATE);
         gameView = (GameView)findViewById(R.id.gameView);
+        View contentView = LayoutInflater.from(GameActivity.this).inflate(R.layout.pop_menu,null, false);
+        tapMoment = (LinearLayout) contentView.findViewById(R.id.tapsdk_moment);
+        tapMoment.setOnClickListener(this);
+        tapAchievement = (LinearLayout) contentView.findViewById(R.id.tapsdk_achievement);
+        tapAchievement.setOnClickListener(this);
+        tapLogout = (LinearLayout) contentView.findViewById(R.id.tap_logout);
+        tapLogout.setOnClickListener(this);
+        tapCloudLeaderboard = (LinearLayout) contentView.findViewById(R.id.tapsdk_leaderboard);
+        tapCloudLeaderboard.setOnClickListener(this);
         int[] bitmapIds = {
                 R.drawable.plane,
                 R.drawable.explosion,
@@ -35,7 +80,63 @@ public class GameActivity extends Activity {
                 R.drawable.bomb,
                 R.drawable.user_center
         };
-        gameView.start(bitmapIds, GameActivity.this);
+
+        currentUser = TDSUser.currentUser();
+        TapMoment.init(GameActivity.this, "FwFdCIr6u71WQDQwQN");
+        // 注册动态回调监听
+        TapMoment.setCallback(new TapMoment.TapMomentCallback() {
+            @Override
+            public void onCallback(int code, String msg) {
+                Log.d(TAG, "内嵌动态：code: " + String.valueOf(code));
+                Log.d(TAG, "内嵌动态： " + msg);
+                if (code == TapMoment.CALLBACK_CODE_GET_NOTICE_SUCCESS) {
+                    // 获取用户新消息成功
+                    Toast.makeText(GameActivity.this, "获取新通知数据为： " + msg, Toast.LENGTH_SHORT).show();
+                }
+                if(code == TapMoment.CALLBACK_CODE_LOGIN_SUCCESS){
+                    // 动态内登陆成功
+                    Toast.makeText(GameActivity.this, "动态内登陆成功： " + msg, Toast.LENGTH_SHORT).show();
+                }
+                if(code == TapMoment.CALLBACK_CODE_PUBLISH_SUCCESS){
+                    // 动态发布成功
+                    Toast.makeText(GameActivity.this, "动态发布成功： " + msg, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+        // 初始化成就数据
+        TapAchievement.initData();
+        TapAchievement.registerCallback(new AchievementCallback() {
+            @Override
+            public void onAchievementSDKInitSuccess() {
+                // 数据加载成功
+                Log.d(TAG, "数据加载成功！");
+                Toast.makeText(GameActivity.this, "数据加载成功！", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAchievementSDKInitFail(AchievementException exception) {
+                // 数据加载失败，请重试
+                Log.d(TAG, "数据加载失败： " + exception.toString());
+                Toast.makeText(GameActivity.this, "数据加载失败： " + exception.toString(), Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onAchievementStatusUpdate(TapAchievementBean item, AchievementException exception) {
+                if (exception != null) {
+                    // 成就更新失败
+                    Log.d(TAG, "成就更新失败: " + exception.toString());
+                    Toast.makeText(GameActivity.this, "成就更新失败: " + exception.toString(), Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                if (item != null) {
+                    // item 更新成功
+                    Log.d(TAG, "成就更新成功");
+                    Toast.makeText(GameActivity.this, "成就更新成功", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        gameView.start(bitmapIds, GameActivity.this, contentView);
     }
 
     @Override
@@ -87,4 +188,108 @@ public class GameActivity extends Activity {
             super.onBackPressed();
         }
     }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.tapsdk_moment:
+                // 场景化入口
+                tapDirectlyOpen();
+                gameView.dismissPopupWindow();
+                Toast.makeText(GameActivity.this, "内嵌动态", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tapsdk_achievement:
+                // 展示成就系统
+                tapShowAchiene();
+                gameView.dismissPopupWindow();
+                Toast.makeText(GameActivity.this, "成就系统", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.tapsdk_leaderboard:
+                // 分数排行榜
+                tapShowCloudLeaderboard();
+                getCloudLeaderboard();
+                break;
+            case R.id.tap_logout:
+                // 退出登陆
+                logout();
+                gameView.dismissPopupWindow();
+                break;
+        }
+    }
+
+    public void submitCloudLeaderboard(String score){
+        Map<String, Double> statistic  = new HashMap<>();
+        statistic.put("score_leejieun", Double.parseDouble(score));
+        LCLeaderboard.updateStatistic(currentUser, statistic).subscribe(new Observer<LCStatisticResult>() {
+
+            @Override
+            public void onSubscribe(@NonNull Disposable d) {
+
+            }
+
+            @Override
+            public void onNext(@NonNull LCStatisticResult lcStatisticResult) {
+                Toast.makeText(GameActivity.this, "分数上传成功", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(@NonNull Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
+    }
+
+    public void getCloudLeaderboard(){
+        LCLeaderboard leaderboard = LCLeaderboard.createWithoutData("score_leejieun");
+        leaderboard.getResults(0, 10, null, null).subscribe(new Observer<LCLeaderboardResult>() {
+            @Override
+            public void onSubscribe(@NotNull Disposable disposable) {}
+
+            @Override
+            public void onNext(@NotNull LCLeaderboardResult leaderboardResult) {
+                List<LCRanking> rankings = leaderboardResult.getResults();
+                // process rankings
+                for (LCRanking r:rankings) {
+                    Log.d(TAG+"RANK", String.valueOf(r.getRank()));
+                }
+            }
+
+            @Override
+            public void onError(@NotNull Throwable throwable) {
+                // handle error
+            }
+
+            @Override
+            public void onComplete() {}
+        });
+    }
+
+    private void tapShowCloudLeaderboard() {
+
+
+    }
+
+    private void tapShowAchiene() {
+        TapAchievement.showAchievementPage();
+    }
+
+    private void tapDirectlyOpen() {
+//        Map<String, String> extras = new HashMap<>();
+//        // 注意：这里的 key 是固定的，"scene_id"； 第二个参数：开发者后台开启场景化入口并配置相关项后可以得到
+//        extras.put("scene_id", "LeeJiEun");
+//        // 注意：第二个参数固定为 "tap://moment/scene/"
+//        TapMoment.directlyOpen(TapMoment.ORIENTATION_DEFAULT, "tap://moment/scene/", extras);
+        TapMoment.open(TapMoment.ORIENTATION_DEFAULT);
+    }
+
+    private void logout (){
+        TDSUser.logOut();
+        AntiAddictionUIKit.logout();
+    }
+
 }

@@ -2,6 +2,7 @@ package com.edam.iu.plane.game;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -12,23 +13,18 @@ import android.graphics.RectF;
 import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.PopupWindow;
 import android.widget.Toast;
-
-
 import com.edam.iu.plane.GameActivity;
 import com.edam.iu.plane.R;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 
-public class GameView extends View {
+public class GameView extends View  {
 
     private static final String TAG = "LeeJiEun";
     private Paint paint;
@@ -66,6 +62,11 @@ public class GameView extends View {
     private float canvasWidth = 0;
     private float canvasHeight = 0;
     GameActivity gameActivity;
+    private View contentView;
+    PopupWindow userCenterPopupWindow;
+    String allScore;
+    private SharedPreferences sp;
+    private SharedPreferences.Editor editor;
 
 
     public GameView(Context context) {
@@ -100,7 +101,8 @@ public class GameView extends View {
         borderSize *= density;
     }
 
-    public void start(int[] bitmapIds, GameActivity gameActivity){
+    public void start(int[] bitmapIds, GameActivity gameActivity, View contentView){
+        this.contentView = contentView;
         this.gameActivity = gameActivity;
         destroy();
         for(int bitmapId : bitmapIds){
@@ -109,6 +111,8 @@ public class GameView extends View {
             bitmaps.add(bitmap);
         }
         startWhenBitmapsReady();
+        sp = gameActivity.getPreferences(Context.MODE_PRIVATE);
+        editor = sp.edit();
     }
     
     private void startWhenBitmapsReady(){
@@ -157,7 +161,6 @@ public class GameView extends View {
         float userCenterTop = 15 * density;
         Log.d(TAG, "userCenterLeft: " + String.valueOf(userCenterLeft) + " userCenterTop: " + String.valueOf(userCenterTop));
         canvas.drawBitmap(userCenterBitmap, userCenterLeft, userCenterTop, paint);
-
 
         if(status == STATUS_GAME_STARTED){
             drawGameStarted(canvas);
@@ -312,7 +315,17 @@ public class GameView extends View {
 
         //绘制实际的分数
         // TODO 可以实现本地缓存分数
-        String allScore = String.valueOf(getScore());
+        allScore = String.valueOf(getScore());
+        Log.d(TAG + "Score", "Score: " + allScore);
+        if(status == STATUS_GAME_PAUSED || status == STATUS_GAME_OVER){
+            String scoreFromSP = sp.getString("AllScore", "0");
+            Log.d(TAG + "Score", "ScoreFromSP: " + score);
+            if (Integer.parseInt(scoreFromSP) < Integer.parseInt(allScore)){
+                editor.putString("AllScore", allScore)
+                        .commit();
+                gameActivity.submitCloudLeaderboard(allScore);
+            }
+        }
         canvas.drawText(allScore, w2 / 2, (h3 - fontSize2) / 2 + fontSize2, textPaint);
         //绘制分数下面的横线
         canvas.translate(0, h3);
@@ -563,7 +576,7 @@ public class GameView extends View {
                 //单击了用户中心
                 Log.d(TAG, "pauseBtnX: " + String.valueOf(x) + "pauseBtnY: " + String.valueOf(y));
                 pause();
-                // TODO openTapSDKSuite
+                showPopupWindow();
                 Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
             }
         }else if(status == STATUS_GAME_PAUSED){
@@ -572,7 +585,7 @@ public class GameView extends View {
                 resume();
             }
             if(isClickUserCenter(x, y)){
-                // TODO openTapSDKSuite
+                showPopupWindow();
                 Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
             }
         }else if(status == STATUS_GAME_OVER){
@@ -581,19 +594,23 @@ public class GameView extends View {
                 restart();
             }
             if(isClickUserCenter(x, y)){
-                // TODO openTapSDKSuite
-                View contentView = LayoutInflater.from(gameActivity).inflate(R.layout.pop_menu,null, false);
-                PopupWindow userCenterPopupWindow = new PopupWindow(contentView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
-                userCenterPopupWindow.setOutsideTouchable(true);
-                userCenterPopupWindow.setTouchable(true);
-                int contentViewWidth = userCenterPopupWindow.getContentView().getMeasuredWidth();
-                userCenterPopupWindow.showAsDropDown(GameView.this, Math.round(canvasWidth / 2), Math.round(- canvasHeight + 4 * getUserCenterBitmapDstRecF().top));
-
+                showPopupWindow();
                 Toast.makeText(gameActivity, "点击我了", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
+    private void showPopupWindow(){
+        userCenterPopupWindow = new PopupWindow(contentView, ActionBar.LayoutParams.WRAP_CONTENT, ActionBar.LayoutParams.WRAP_CONTENT, true);
+        userCenterPopupWindow.setOutsideTouchable(true);
+        userCenterPopupWindow.setTouchable(true);
+        int contentViewWidth = userCenterPopupWindow.getContentView().getMeasuredWidth();
+        userCenterPopupWindow.showAsDropDown(GameView.this, Math.round(canvasWidth / 2), Math.round(- canvasHeight + 4 * getUserCenterBitmapDstRecF().top));
+    }
+
+    public void dismissPopupWindow(){
+        userCenterPopupWindow.dismiss();
+    }
 
     //是否单击了左上角的暂停按钮
     private boolean isClickPause(float x, float y){
