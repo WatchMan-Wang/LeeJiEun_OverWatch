@@ -88,9 +88,9 @@ public class MainActivity extends AppCompatActivity {
                 // 这是逻辑上的 Bug。所以，这里需要处理下。
                 // 方案一：sp 缓存用户唯一标识，这里不进入游戏，而是进行实名认证。认证通过后可以游戏则进入游戏
                 // TODO
-//                userIdentifier = sp.getString("USERIDENTIFIER", "");
-//                tapAntiAddiction(userIdentifier);
-                enterGame();
+                userIdentifier = sp.getString("USERIDENTIFIER", "");
+                tapAntiAddiction(userIdentifier);
+//                enterGame();
             }
         });
 
