@@ -8,4 +8,6 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="tapblue">#15C5CE</color>
-</resources>
+    <color name="colorAccent">#FF4081</color>
+    <color name="transparent_background">#55000000</color>
+    </resources>

@@ -1,19 +1,26 @@
 package com.edam.iu.plane;
 
-import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager.widget.ViewPager;
 import com.edam.iu.plane.game.GameView;
 import com.edam.iu.plane.tools.StatusBarUtil;
+import com.edam.iu.plane.viewpagercards.CardFragmentPagerAdapter;
+import com.edam.iu.plane.viewpagercards.CardItem;
+import com.edam.iu.plane.viewpagercards.CardPagerAdapter;
+import com.edam.iu.plane.viewpagercards.ShadowTransformer;
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit;
 import com.tapsdk.bootstrap.account.TDSUser;
 import com.tapsdk.moment.TapMoment;
@@ -24,6 +31,7 @@ import com.tds.achievement.TapAchievementBean;
 
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,12 +39,13 @@ import java.util.Map;
 import cn.leancloud.LCLeaderboard;
 import cn.leancloud.LCLeaderboardResult;
 import cn.leancloud.LCRanking;
+import cn.leancloud.LCStatistic;
 import cn.leancloud.LCStatisticResult;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
 
-public class GameActivity extends Activity implements View.OnClickListener {
+public class GameActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
 
     private static final String TAG = "LeeJiEun";
     private GameView gameView;
@@ -47,6 +56,14 @@ public class GameActivity extends Activity implements View.OnClickListener {
     private LinearLayout tapLogout;
     private SharedPreferences sp;
     private TDSUser currentUser;
+    private ViewPager mViewPager;
+    private CardPagerAdapter mCardAdapter;
+    private ShadowTransformer mCardShadowTransformer;
+    private CardFragmentPagerAdapter mFragmentCardAdapter;
+    private ShadowTransformer mFragmentCardShadowTransformer;
+    private ImageButton imageButton;
+    private LinearLayout lvViewPager;
+    private boolean mShowingFragments = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +97,33 @@ public class GameActivity extends Activity implements View.OnClickListener {
                 R.drawable.bomb,
                 R.drawable.user_center
         };
+
+        mViewPager = (ViewPager) findViewById(R.id.leadboard_vpager);
+        imageButton = (ImageButton) findViewById(R.id.imagebutton);
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                lvViewPager.setVisibility(View.GONE);
+                initStatusBar();
+            }
+        });
+        lvViewPager = (LinearLayout) findViewById(R.id.lv_view_pager);
+        lvViewPager.setVisibility(View.GONE);
+
+        mCardAdapter = new CardPagerAdapter();
+        mCardAdapter.addCardItem(new CardItem(R.string.title_1, R.string.text_1, String.valueOf(1)));
+        mCardAdapter.addCardItem(new CardItem(R.string.title_2, R.string.text_1, String.valueOf(1)));
+        mCardAdapter.addCardItem(new CardItem(R.string.title_3, R.string.text_1, String.valueOf(1)));
+        mCardAdapter.addCardItem(new CardItem(R.string.title_4, R.string.text_1, String.valueOf(1)));
+        mFragmentCardAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(),
+                dpToPixels(2, this));
+
+        mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
+        mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentCardAdapter);
+
+        mViewPager.setAdapter(mCardAdapter);
+        mViewPager.setPageTransformer(false, mCardShadowTransformer);
+        mViewPager.setOffscreenPageLimit(3);
 
         currentUser = TDSUser.currentUser();
         TapMoment.init(GameActivity.this, "FwFdCIr6u71WQDQwQN");
@@ -161,20 +205,6 @@ public class GameActivity extends Activity implements View.OnClickListener {
         gameView = null;
     }
 
-    private void initStatusBar() {
-        //沉浸式代码配置
-        //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
-        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
-        //设置状态栏透明
-        StatusBarUtil.setTranslucentStatus(this);
-        //一般的手机的状态栏文字和图标都是白色的, 可如果你的应用也是纯白色的, 或导致状态栏文字看不清
-        //所以如果你是这种情况,请使用以下代码, 设置状态使用深色文字图标风格, 否则你可以选择性注释掉这个if内容
-        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
-            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
-            //这样半透明+白=灰, 状态栏的文字能看得清
-            StatusBarUtil.setStatusBarColor(this, 0x55000000);
-        }
-    }
 
     // 再按一次退出程序(如果两次按退出按钮的时间间隔小于2秒就执行退出操作)
     private long exitTime = 0;
@@ -208,6 +238,9 @@ public class GameActivity extends Activity implements View.OnClickListener {
                 // 分数排行榜
                 tapShowCloudLeaderboard();
                 getCloudLeaderboard();
+                lvViewPager.setVisibility(View.VISIBLE);
+                StatusBarUtil.setStatusBarColor(this, 0x55000000);
+                gameView.dismissPopupWindow();
                 break;
             case R.id.tap_logout:
                 // 退出登陆
@@ -246,7 +279,10 @@ public class GameActivity extends Activity implements View.OnClickListener {
 
     public void getCloudLeaderboard(){
         LCLeaderboard leaderboard = LCLeaderboard.createWithoutData("score_leejieun");
-        leaderboard.getResults(0, 10, null, null).subscribe(new Observer<LCLeaderboardResult>() {
+        List<String> selectKeys = new ArrayList<>();
+        selectKeys.add("nickname");
+        selectKeys.add("avatar");
+        leaderboard.getResults(0, 10, selectKeys, null).subscribe(new Observer<LCLeaderboardResult>() {
             @Override
             public void onSubscribe(@NotNull Disposable disposable) {}
 
@@ -254,12 +290,16 @@ public class GameActivity extends Activity implements View.OnClickListener {
             public void onNext(@NotNull LCLeaderboardResult leaderboardResult) {
                 List<LCRanking> rankings = leaderboardResult.getResults();
                 // process rankings
+                int i = 0;
                 for (LCRanking r:rankings) {
                     Log.d(TAG+"RANK", String.valueOf(r.getRank()));
                     Log.d(TAG+"RANK", String.valueOf(r.getUser().getObjectId()));
-                    Log.d(TAG+"RANK", String.valueOf(r.getUser().get("name")));
+                    // 下面两行代码行不通
+                    Log.d(TAG+"RANK", String.valueOf(r.getUser().get("nickname")));
                     Log.d(TAG+"RANK", String.valueOf(r.getUser().get("avatar")));
-                    // TODO 根据 objectId 得到用户的 name、avatar 属性
+                    i ++;
+                    if (i >= 3)
+                        break;
 
                 }
             }
@@ -267,6 +307,32 @@ public class GameActivity extends Activity implements View.OnClickListener {
             @Override
             public void onError(@NotNull Throwable throwable) {
                 // handle error
+            }
+
+            @Override
+            public void onComplete() {}
+        });
+    }
+
+    public void getCurrentUserLeaderboard(){
+        // 查询排行榜成员成绩
+        LCLeaderboard.getUserStatistics(currentUser).subscribe(new Observer<LCStatisticResult>() {
+            @Override
+            public void onSubscribe(@NotNull Disposable disposable) {}
+
+            @Override
+            public void onNext(@NotNull LCStatisticResult lcStatisticResult) {
+                List<LCStatistic> statistics = lcStatisticResult.getResults();
+                for (LCStatistic statistic : statistics) {
+                    Log.d(TAG, statistic.getName());
+                    Log.d(TAG, String.valueOf(statistic.getValue()));
+                }
+            }
+
+            @Override
+            public void onError(@NotNull Throwable throwable) {
+                // handle error
+                Toast.makeText(GameActivity.this, "查询失败： " + throwable.getMessage(), Toast.LENGTH_SHORT).show();
             }
 
             @Override
@@ -295,6 +361,32 @@ public class GameActivity extends Activity implements View.OnClickListener {
     private void logout (){
         TDSUser.logOut();
         AntiAddictionUIKit.logout();
+    }
+
+    public static float dpToPixels(int dp, GameActivity context) {
+        return dp * (context.getResources().getDisplayMetrics().density);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        mCardShadowTransformer.enableScaling(b);
+        mFragmentCardShadowTransformer.enableScaling(b);
+    }
+
+    private void initStatusBar() {
+        //沉浸式代码配置
+        //当FitsSystemWindows设置 true 时，会在屏幕最上方预留出状态栏高度的 padding
+        StatusBarUtil.setRootViewFitsSystemWindows(this, true);
+        //设置状态栏透明
+        StatusBarUtil.setTranslucentStatus(this);
+        //一般的手机的状态栏文字和图标都是白色的, 可如果你的应用也是纯白色的, 或导致状态栏文字看不清
+        //所以如果你是这种情况,请使用以下代码, 设置状态使用深色文字图标风格, 否则你可以选择性注释掉这个if内容
+        if (!StatusBarUtil.setStatusBarDarkTheme(this, true)) {
+            //如果不支持设置深色风格 为了兼容总不能让状态栏白白的看不清, 于是设置一个状态栏颜色为半透明,
+            //这样半透明+白=灰, 状态栏的文字能看得清
+            StatusBarUtil.setStatusBarColor(this, 0x55000000);
+        }
+
     }
 
 }

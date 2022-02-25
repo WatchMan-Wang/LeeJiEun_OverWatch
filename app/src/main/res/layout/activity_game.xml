@@ -5,9 +5,40 @@
     android:layout_height="match_parent"
     tools:context=".GameActivity">
 
-    <com.edam.iu.plane.game.GameView
-        android:id="@+id/gameView"
+    <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent">
+        <com.edam.iu.plane.game.GameView
+            android:id="@+id/gameView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/lv_view_pager"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:context=".LeaderboardActivity"
+            android:orientation="vertical"
+            android:background="@color/transparent_background">
+
+            <androidx.viewpager.widget.ViewPager
+                android:id="@+id/leadboard_vpager"
+                android:layout_width="wrap_content"
+                android:layout_height="400dp"
+                android:layout_gravity="center"
+                android:clipToPadding="false"
+                android:overScrollMode="never"
+                android:padding="60dp"
+                android:layout_marginTop="110dp"/>
+
+            <ImageButton
+                android:id="@+id/imagebutton"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginTop="-10dp"
+                android:layout_gravity="center"
+                android:background="@drawable/imagebutton" />
+        </LinearLayout>
+    </FrameLayout>
 
 </RelativeLayout>
