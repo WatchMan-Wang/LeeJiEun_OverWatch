@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
@@ -64,6 +65,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private ImageButton imageButton;
     private LinearLayout lvViewPager;
     private boolean mShowingFragments = false;
+    List<LCRanking> rankings;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,21 +111,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         });
         lvViewPager = (LinearLayout) findViewById(R.id.lv_view_pager);
         lvViewPager.setVisibility(View.GONE);
-
-        mCardAdapter = new CardPagerAdapter();
-        mCardAdapter.addCardItem(new CardItem(R.string.title_1, R.string.text_1, String.valueOf(1)));
-        mCardAdapter.addCardItem(new CardItem(R.string.title_2, R.string.text_1, String.valueOf(1)));
-        mCardAdapter.addCardItem(new CardItem(R.string.title_3, R.string.text_1, String.valueOf(1)));
-        mCardAdapter.addCardItem(new CardItem(R.string.title_4, R.string.text_1, String.valueOf(1)));
-        mFragmentCardAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(),
-                dpToPixels(2, this));
-
-        mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
-        mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentCardAdapter);
-
-        mViewPager.setAdapter(mCardAdapter);
-        mViewPager.setPageTransformer(false, mCardShadowTransformer);
-        mViewPager.setOffscreenPageLimit(3);
 
         currentUser = TDSUser.currentUser();
         TapMoment.init(GameActivity.this, "FwFdCIr6u71WQDQwQN");
@@ -239,6 +226,13 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 tapShowCloudLeaderboard();
                 getCloudLeaderboard();
                 lvViewPager.setVisibility(View.VISIBLE);
+                lvViewPager.setClickable(false);
+                lvViewPager.setOnTouchListener(new View.OnTouchListener() {
+                    @Override
+                    public boolean onTouch(View view, MotionEvent motionEvent) {
+                        return true;
+                    }
+                });
                 StatusBarUtil.setStatusBarColor(this, 0x55000000);
                 gameView.dismissPopupWindow();
                 break;
@@ -288,7 +282,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
 
             @Override
             public void onNext(@NotNull LCLeaderboardResult leaderboardResult) {
-                List<LCRanking> rankings = leaderboardResult.getResults();
+                mCardAdapter = new CardPagerAdapter(GameActivity.this);
+                rankings = leaderboardResult.getResults();
                 // process rankings
                 int i = 0;
                 for (LCRanking r:rankings) {
@@ -298,8 +293,11 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     Log.d(TAG+"RANK", String.valueOf(r.getUser().get("nickname")));
                     Log.d(TAG+"RANK", String.valueOf(r.getUser().get("avatar")));
                     i ++;
-                    if (i >= 3)
-                        break;
+                    if(i == 1){
+                        mCardAdapter.addCardItem(new CardItem(r.getUser().get("avatar").toString(), r.getUser().get("nickname").toString(), String.valueOf(i), true));
+                    }else {
+                        mCardAdapter.addCardItem(new CardItem(r.getUser().get("avatar").toString(), r.getUser().get("nickname").toString(), String.valueOf(i), false));
+                    }
 
                 }
             }
@@ -310,7 +308,18 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
 
             @Override
-            public void onComplete() {}
+            public void onComplete() {
+                mFragmentCardAdapter = new CardFragmentPagerAdapter(getSupportFragmentManager(),
+                        dpToPixels(2, GameActivity.this));
+
+                mCardShadowTransformer = new ShadowTransformer(mViewPager, mCardAdapter);
+                mFragmentCardShadowTransformer = new ShadowTransformer(mViewPager, mFragmentCardAdapter);
+
+                mViewPager.setAdapter(mCardAdapter);
+                mViewPager.setPageTransformer(false, mCardShadowTransformer);
+                mViewPager.setOffscreenPageLimit(3);
+                mCardAdapter = null;
+            }
         });
     }
 

@@ -15,30 +15,55 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center"
             android:orientation="vertical"
-            android:padding="24dp">
+            android:padding="1dp">
 
-            <TextView
-                android:id="@+id/titleTextView"
-                style="@style/TextAppearance.AppCompat.Title"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_gravity="center"
+                android:padding="4dp">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/ranking_avatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:scaleType="fitCenter"
+                    app:riv_corner_radius="30dp"
+                    android:layout_gravity="center"/>
+
+                <TextView
+                    android:id="@+id/ranking_nickname"
+                    style="@style/TextAppearance.AppCompat.Title"
+                    android:text="HHHHHHHHHH"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginLeft="10dp"/>
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/contentTextView"
                 style="@style/TextAppearance.AppCompat.Body1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"/>
-
-            <Button
-                style="@style/ButtonStyle"
-                android:layout_width="match_parent"
+                android:text="为可再爱 为可再前行  --  Love Poem"
+                android:layout_gravity="center"/>
+            <TextView
+                android:id="@+id/leejieun_fans"
+                style="@style/TextAppearance.AppCompat.Body1"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
-                android:text="Button" />
+                android:layout_gravity="center"
+                android:visibility="gone"
+                android:text="就想知道：还有谁！"
+                android:layout_marginTop="10dp" />
+
         </LinearLayout>
+
 
         <FrameLayout
             android:layout_width="wrap_content"

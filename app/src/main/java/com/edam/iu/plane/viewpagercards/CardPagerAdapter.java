@@ -1,28 +1,37 @@
 package com.edam.iu.plane.viewpagercards;
 
 
+import android.text.TextPaint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.cardview.widget.CardView;
 import androidx.viewpager.widget.PagerAdapter;
 
+import com.bumptech.glide.Glide;
+import com.edam.iu.plane.GameActivity;
 import com.edam.iu.plane.R;
+import com.makeramen.roundedimageview.RoundedImageView;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
 
+    private final GameActivity gameActivity;
     private List<CardView> mViews;
     private List<CardItem> mData;
     private float mBaseElevation;
 
-    public CardPagerAdapter() {
-        mData = new ArrayList<>();
-        mViews = new ArrayList<>();
+
+    public CardPagerAdapter(GameActivity gameActivity) {
+        this.mData = new ArrayList<>();
+        this.mViews = new ArrayList<>();
+        this.gameActivity = gameActivity;
     }
 
     public void addCardItem(CardItem item) {
@@ -73,12 +82,21 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
     }
 
     private void bind(CardItem item, View view) {
-        TextView titleTextView = (TextView) view.findViewById(R.id.titleTextView);
-        TextView contentTextView = (TextView) view.findViewById(R.id.contentTextView);
+        ImageView avatarImg = (RoundedImageView) view.findViewById(R.id.ranking_avatar);
+        TextView nickname = (TextView) view.findViewById(R.id.ranking_nickname);
         TextView rankingTextView = (TextView) view.findViewById(R.id.ranking);
-        titleTextView.setText(item.getTitle());
-        contentTextView.setText(item.getText());
+        TextView leeJiEunFans = (TextView) view.findViewById(R.id.leejieun_fans);
+        if(item.getIsLeeJiEunFans()){
+            leeJiEunFans.setVisibility(View.VISIBLE);
+            TextPaint paint = leeJiEunFans.getPaint();
+            paint.setFakeBoldText(true);
+        }
+
+
+        Glide.with(gameActivity.getApplicationContext()).load(item.getAvatarUrl()).into(avatarImg);
+        nickname.setText(item.getNickName());
         rankingTextView.setText(item.getRanking());
+
     }
 
 }
