@@ -91,8 +91,6 @@ public class CardPagerAdapter extends PagerAdapter implements CardAdapter {
             TextPaint paint = leeJiEunFans.getPaint();
             paint.setFakeBoldText(true);
         }
-
-
         Glide.with(gameActivity.getApplicationContext()).load(item.getAvatarUrl()).into(avatarImg);
         nickname.setText(item.getNickName());
         rankingTextView.setText(item.getRanking());
