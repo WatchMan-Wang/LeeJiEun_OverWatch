@@ -19,6 +19,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.edam.iu.plane.tools.StatusBarUtil;
+import com.tapsdk.antiaddiction.Config;
 import com.tapsdk.antiaddiction.config.AntiAddictionFunctionConfig;
 import com.tapsdk.antiaddiction.constants.Constants;
 import com.tapsdk.antiaddictionui.AntiAddictionUICallback;
@@ -28,11 +29,16 @@ import com.tapsdk.bootstrap.TapBootstrap;
 import com.tapsdk.bootstrap.account.TDSUser;
 import com.tapsdk.bootstrap.exceptions.TapError;
 import com.taptap.sdk.TapLoginHelper;
+import com.tds.common.entities.Pair;
+import com.tds.common.entities.TapBillboardConfig;
 import com.tds.common.entities.TapConfig;
 import com.tds.common.entities.TapDBConfig;
 import com.tds.common.models.TapRegionType;
 
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 import cn.leancloud.LCLogger;
 import cn.leancloud.LeanCloud;
@@ -108,6 +114,18 @@ public class MainActivity extends AppCompatActivity {
     private void initTapSDK() {
         LeanCloud.setLogLevel(LCLogger.Level.DEBUG);
         WebView.setWebContentsDebuggingEnabled(true);
+
+
+        // 初始化公告系统
+        Set<Pair<String,String>> dimensionSet = new HashSet<>();
+        dimensionSet.addAll(Arrays.asList(Pair.create("location", "CN"), Pair.create("platform", "TapTap")));
+        String billboardServerUrl = "https://shouwangzhe.weijiash.cn";
+        TapBillboardConfig billboardConfig = new TapBillboardConfig.Builder()
+                .withDimensionSet(dimensionSet)
+                .withServerUrl(billboardServerUrl)
+                .withTemplate("navigate")
+                .build();
+
         // 内建账户方式登陆 SDK 初始化
         // TapDB 初始化
         TapDBConfig tapDBConfig = new TapDBConfig();
@@ -122,6 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 .withClientId("FwFdCIr6u71WQDQwQN")
                 .withClientToken("8zkWbrNMBXYtdg6GTyGy3FLRcIi1C5PuKjxwWAUe")
                 .withServerUrl("https://fwfdcir6.cloud.tds1.tapapis.cn")
+                .withBillboardConfig(billboardConfig)
                 .withTapDBConfig(tapDBConfig)
                 .build();
         TapBootstrap.init(MainActivity.this, tapConfig);
@@ -129,12 +148,13 @@ public class MainActivity extends AppCompatActivity {
 
 
         // Android SDK 的各接口第一个参数是当前 Activity，以下不再说明
-        String gameIdentifier = "FwFdCIr6u71WQDQwQN";
-        AntiAddictionFunctionConfig config = new AntiAddictionFunctionConfig.Builder()
-                .enablePaymentLimit(true) // 是否启用消费限制功能
-                .enableOnLineTimeLimit(true) // 是否启用时长限制功能
+        Config config = new Config.Builder()
+                .withClientId("FwFdCIr6u71WQDQwQN")
+                .enableTapLogin(true)
+                .showSwitchAccount(false)
                 .build();
-        AntiAddictionUIKit.init(MainActivity.this, gameIdentifier, config,
+
+        AntiAddictionUIKit.init(MainActivity.this, config,
                 new AntiAddictionUICallback() {
                     @Override
                     public void onCallback(int code, Map<String, Object> extras) {
@@ -150,12 +170,12 @@ public class MainActivity extends AppCompatActivity {
                                 Toast.makeText(MainActivity.this, "防沉迷认证成功，进入游戏", Toast.LENGTH_SHORT).show();
                                 enterGame();
                                 break;
-                            case Constants.ANTI_ADDICTION_CALLBACK_CODE.LOGOUT:
+                            case Constants.ANTI_ADDICTION_CALLBACK_CODE.EXITED:
 //                                Log.d(TAG, extras.toString());
                                 Log.d(TAG, "防沉迷的登出");
                                 Toast.makeText(MainActivity.this, "防沉迷的登出", Toast.LENGTH_SHORT).show();
                                 break;
-                            case Constants.ANTI_ADDICTION_CALLBACK_CODE.NIGHT_STRICT:
+                            case Constants.ANTI_ADDICTION_CALLBACK_CODE.PERIOD_RESTRICT:
                                 Log.d(TAG, "防沉迷未成年玩家无法进行游戏");
                                 Toast.makeText(MainActivity.this, "防沉迷未成年玩家无法进行游戏", Toast.LENGTH_SHORT).show();
                                 break;
@@ -179,7 +199,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "用户唯一标识为空，检查 Tap 授权", Toast.LENGTH_SHORT).show();
             return;
         }
-        AntiAddictionUIKit.startup(MainActivity.this, true, userIdentifier);
+        AntiAddictionUIKit.startup(MainActivity.this, userIdentifier);
     }
 
     private void taptapLogin() {
@@ -246,8 +266,6 @@ public class MainActivity extends AppCompatActivity {
                 textView.startAnimation(animation);
             }
         }
-
-        ;
     };
 
     private void initStatusBar() {

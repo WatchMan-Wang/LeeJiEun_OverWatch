@@ -23,19 +23,30 @@ import com.edam.iu.plane.viewpagercards.CardItem;
 import com.edam.iu.plane.viewpagercards.CardPagerAdapter;
 import com.edam.iu.plane.viewpagercards.ShadowTransformer;
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit;
+import com.tapsdk.billboard.Callback;
+import com.tapsdk.billboard.ITapBillboard;
+import com.tapsdk.billboard.TapBillboard;
+import com.tapsdk.billboard.exceptions.TapBillboardException;
 import com.tapsdk.bootstrap.account.TDSUser;
 import com.tapsdk.moment.TapMoment;
 import com.tds.achievement.AchievementCallback;
 import com.tds.achievement.AchievementException;
 import com.tds.achievement.TapAchievement;
 import com.tds.achievement.TapAchievementBean;
+import com.tds.common.entities.Pair;
+import com.tds.common.entities.TapBillboardConfig;
+import com.tds.common.entities.TapConfig;
 
 import org.jetbrains.annotations.NotNull;
 
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 import cn.leancloud.LCLeaderboard;
 import cn.leancloud.LCLeaderboardResult;
@@ -53,7 +64,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     private LinearLayout tapAchievement;
     private LinearLayout tapMoment;
     private LinearLayout tapCloudLeaderboard;
-    private LinearLayout tapMenu4;
+    private LinearLayout tapBillboard;
     private LinearLayout tapLogout;
     private SharedPreferences sp;
     private TDSUser currentUser;
@@ -84,6 +95,8 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
         tapLogout.setOnClickListener(this);
         tapCloudLeaderboard = (LinearLayout) contentView.findViewById(R.id.tapsdk_leaderboard);
         tapCloudLeaderboard.setOnClickListener(this);
+        tapBillboard = (LinearLayout) contentView.findViewById(R.id.billboard);
+        tapBillboard.setOnClickListener(this);
         int[] bitmapIds = {
                 R.drawable.plane,
                 R.drawable.explosion,
@@ -98,6 +111,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 R.drawable.pause2,
                 R.drawable.bomb,
                 R.drawable.user_center
+
         };
 
         mViewPager = (ViewPager) findViewById(R.id.leadboard_vpager);
@@ -236,6 +250,23 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                 StatusBarUtil.setStatusBarColor(this, 0x55000000);
                 gameView.dismissPopupWindow();
                 break;
+            case R.id.billboard:
+                // 公告系统
+                Log.d(TAG, "点击了公告按钮");
+                TapBillboard.openPanel(GameActivity.this, new Callback<Void>() {
+                    @Override
+                    public void onSuccess(Void unused) {
+                        Log.d(TAG, "公告系统 onSuccess。。。");
+                    }
+
+                    @Override
+                    public void onError(TapBillboardException e) {
+                        Log.d(TAG, "公告系统报错 code：" + String.valueOf(e.code));
+                        Log.d(TAG, "公告系统报错 message：" + e.message);
+                    }
+                });
+                gameView.dismissPopupWindow();
+                break;
             case R.id.tap_logout:
                 // 退出登陆
                 logout();
@@ -298,7 +329,6 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
                     }else {
                         mCardAdapter.addCardItem(new CardItem(r.getUser().get("avatar").toString(), r.getUser().get("nickname").toString(), String.valueOf(i), false));
                     }
-
                 }
             }
 
