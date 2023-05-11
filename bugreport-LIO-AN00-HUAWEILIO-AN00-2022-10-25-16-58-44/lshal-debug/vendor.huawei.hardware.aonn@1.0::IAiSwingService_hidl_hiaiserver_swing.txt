@@ -1,0 +1,1 @@
+*** command 'lshal debug -E vendor.huawei.hardware.aonn@1.0::IAiSwingService_hidl/hiaiserver_swing' failed: exit code 128

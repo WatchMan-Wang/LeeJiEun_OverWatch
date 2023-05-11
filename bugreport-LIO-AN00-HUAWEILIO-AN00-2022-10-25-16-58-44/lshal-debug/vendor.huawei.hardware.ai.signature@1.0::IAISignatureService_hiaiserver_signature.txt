@@ -1,0 +1,1 @@
+*** command 'lshal debug -E vendor.huawei.hardware.ai.signature@1.0::IAISignatureService/hiaiserver_signature' failed: exit code 128

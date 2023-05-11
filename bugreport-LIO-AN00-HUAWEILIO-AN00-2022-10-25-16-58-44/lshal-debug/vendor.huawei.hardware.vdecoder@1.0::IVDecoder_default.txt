@@ -1,0 +1,1 @@
+*** command 'lshal debug -E vendor.huawei.hardware.vdecoder@1.0::IVDecoder/default' failed: exit code 128

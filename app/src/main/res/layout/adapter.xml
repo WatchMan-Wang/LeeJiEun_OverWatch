@@ -59,7 +59,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:visibility="gone"
-                android:text="就想知道：还有谁！"
+                android:text="我是一名 UAENA !"
                 android:layout_marginTop="10dp" />
 
         </LinearLayout>

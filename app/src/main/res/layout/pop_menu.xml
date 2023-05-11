@@ -68,7 +68,7 @@
         <ImageView
             android:layout_width="30dp"
             android:layout_height="30dp"
-            android:src="@drawable/tapsdk_suite_ic_achievement_default"/>
+            android:src="@drawable/tapsdk_suite_ic_friends_default"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
