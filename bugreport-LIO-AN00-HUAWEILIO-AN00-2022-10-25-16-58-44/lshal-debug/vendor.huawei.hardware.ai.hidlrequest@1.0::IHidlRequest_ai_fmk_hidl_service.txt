@@ -1,0 +1,1 @@
+*** command 'lshal debug -E vendor.huawei.hardware.ai.hidlrequest@1.0::IHidlRequest/ai_fmk_hidl_service' failed: exit code 128

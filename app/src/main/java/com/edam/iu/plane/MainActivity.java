@@ -24,6 +24,8 @@ import com.tapsdk.antiaddiction.config.AntiAddictionFunctionConfig;
 import com.tapsdk.antiaddiction.constants.Constants;
 import com.tapsdk.antiaddictionui.AntiAddictionUICallback;
 import com.tapsdk.antiaddictionui.AntiAddictionUIKit;
+import com.tapsdk.billboard.CustomLinkListener;
+import com.tapsdk.billboard.TapBillboard;
 import com.tapsdk.bootstrap.Callback;
 import com.tapsdk.bootstrap.TapBootstrap;
 import com.tapsdk.bootstrap.account.TDSUser;
@@ -93,7 +95,6 @@ public class MainActivity extends AppCompatActivity {
                 // 判定是否认证过，因为不检查，TapTap 未实名认证，调转认证时杀死游戏进程，重新启动游戏判定已经登陆过，则直接进入游戏。
                 // 这是逻辑上的 Bug。所以，这里需要处理下。
                 // 方案一：sp 缓存用户唯一标识，这里不进入游戏，而是进行实名认证。认证通过后可以游戏则进入游戏
-                // TODO
                 userIdentifier = sp.getString("USERIDENTIFIER", "");
                 tapAntiAddiction(userIdentifier);
 //                enterGame();
@@ -123,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
         TapBillboardConfig billboardConfig = new TapBillboardConfig.Builder()
                 .withDimensionSet(dimensionSet)
                 .withServerUrl(billboardServerUrl)
-                .withTemplate("navigate")
                 .build();
 
         // 内建账户方式登陆 SDK 初始化
@@ -145,12 +145,18 @@ public class MainActivity extends AppCompatActivity {
                 .build();
         TapBootstrap.init(MainActivity.this, tapConfig);
 
-
+        TapBillboard.registerCustomLinkListener(new CustomLinkListener() {
+            @Override
+            public void onCustomUrlClick(String url) {
+                // 这里返回的 url 地址和游戏在公告系统内配置的地址是一致的
+                // 注意如果有 UI 操作需要切换到 Android 主线程处理
+                Log.d(TAG, url);
+            }
+        });
 
         // Android SDK 的各接口第一个参数是当前 Activity，以下不再说明
         Config config = new Config.Builder()
                 .withClientId("FwFdCIr6u71WQDQwQN")
-                .enableTapLogin(true)
                 .showSwitchAccount(false)
                 .build();
 
@@ -199,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
             Toast.makeText(MainActivity.this, "用户唯一标识为空，检查 Tap 授权", Toast.LENGTH_SHORT).show();
             return;
         }
-        AntiAddictionUIKit.startup(MainActivity.this, userIdentifier);
+        AntiAddictionUIKit.startup(MainActivity.this, "DBDC6E472A4C81627DB92AF4FGVRGF3E7989689", false);
     }
 
     private void taptapLogin() {

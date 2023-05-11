@@ -1,0 +1,1 @@
+*** command 'lshal debug -E vendor.huawei.hardware.camera.secure@1.0::IHwCameraSecureService/hisi.secure.camera' failed: exit code 128

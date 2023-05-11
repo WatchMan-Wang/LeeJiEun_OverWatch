@@ -1,0 +1,115 @@
+9638 9637 253:5 / / ro,relatime master:1 - erofs /dev/block/dm-5 ro,seclabel,user_xattr,lz4asm
+9639 9638 0:18 / /dev rw,nosuid,relatime master:2 - tmpfs tmpfs rw,seclabel,size=3771152k,nr_inodes=942788,mode=755
+9640 9639 0:19 / /dev/pts rw,relatime master:3 - devpts devpts rw,seclabel,mode=600,ptmxmode=000
+9641 9639 0:23 / /dev/blkio rw,nosuid,nodev,noexec,relatime master:8 - cgroup none rw,blkio
+9642 9639 0:24 / /dev/cg2_bpf rw,nosuid,nodev,noexec,relatime master:19 - cgroup2 none rw
+9643 9639 0:25 / /dev/cpuctl rw,nosuid,nodev,noexec,relatime master:20 - cgroup none rw,cpu
+9644 9639 0:27 / /dev/cpuset rw,nosuid,nodev,noexec,relatime master:22 - cgroup none rw,cpuset,noprefix,release_agent=/sbin/cpuset_release_agent
+9645 9639 0:28 / /dev/memcg rw,nosuid,nodev,noexec,relatime master:23 - cgroup none rw,memory
+9646 9639 0:29 / /dev/stune rw,nosuid,nodev,noexec,relatime master:24 - cgroup none rw,schedtune
+9647 9639 0:32 / /dev/iolimit rw,relatime master:29 - cgroup none rw,iolimit
+9648 9639 0:34 / /dev/workingset rw,nosuid,nodev,noexec,relatime master:31 - cgroup none rw,workingset
+9649 9639 0:35 / /dev/usb-ffs/adb rw,relatime master:32 - functionfs adb rw
+9650 9639 0:36 / /dev/usb-ffs/hdb rw,relatime master:33 - functionfs hdb rw
+9651 9639 0:37 / /dev/frz rw,relatime master:34 - cgroup none rw,freezer
+9652 9638 0:5 / /proc rw,relatime master:4 - proc proc rw,gid=3009,hidepid=2
+9653 9638 0:20 / /sys rw,relatime master:5 - sysfs sysfs rw,seclabel
+9654 9653 0:17 / /sys/fs/selinux rw,relatime master:6 - selinuxfs selinuxfs rw
+9655 9653 0:7 / /sys/kernel/debug rw,relatime master:25 - debugfs debugfs rw,seclabel
+9656 9655 0:11 / /sys/kernel/debug/tracing rw,relatime master:36 - tracefs tracefs rw,seclabel
+9657 9653 0:30 / /sys/fs/bpf rw,nosuid,nodev,noexec,relatime master:27 - bpf bpf rw
+9658 9653 0:31 / /sys/fs/pstore rw,nosuid,nodev,noexec,relatime master:28 - pstore pstore rw,seclabel
+9659 9653 0:41 / /sys/fs/cgroup rw,relatime master:47 - tmpfs none rw,seclabel,size=3771152k,nr_inodes=942788,mode=750,gid=1000
+9660 9659 0:42 / /sys/fs/cgroup/pids rw,relatime master:48 - cgroup none rw,pids
+9661 9638 0:21 / /mnt rw,nosuid,nodev,noexec,relatime master:7 - tmpfs tmpfs rw,seclabel,size=3771152k,nr_inodes=942788,mode=755,gid=1000
+9662 9661 0:33 / /mnt/update_engine rw,nosuid,nodev,relatime master:30 - tmpfs none rw,seclabel,size=3771152k,nr_inodes=942788,mode=700
+9663 9661 259:16 / /mnt/hisee_fs rw,noatime master:40 - ext4 /dev/block/by-name/hisee_fs rw,context=u:object_r:hisee_data_file:s0,data=ordered
+9664 9661 8:51 / /mnt/modem/modem_secure rw,noatime master:44 - ext4 /dev/block/by-name/modem_secure rw,context=u:object_r:modem_secure_file:s0,noauto_da_alloc,data=ordered
+9665 9661 8:58 / /mnt/modem/mnvm2:0 rw,nosuid,nodev,noatime master:46 - ext4 /dev/block/by-name/modemnvm_img rw,context=u:object_r:modem_nv_file:s0,noauto_da_alloc,data=ordered
+9666 9661 0:43 / /mnt/runtime/default/emulated rw,nosuid,nodev,noexec,noatime master:49 - sdcardfs /data/media rw,fsuid=1023,fsgid=1023,gid=1015,multiuser,mask=6,derive_gid,default_normal,reserved=20MB,unshared_obb
+9667 9661 0:43 / /mnt/runtime/read/emulated rw,nosuid,nodev,noexec,noatime master:49 - sdcardfs /data/media rw,fsuid=1023,fsgid=1023,gid=9997,multiuser,mask=23,derive_gid,default_normal,reserved=20MB,unshared_obb
+9668 9661 0:43 / /mnt/runtime/write/emulated rw,nosuid,nodev,noexec,noatime master:49 - sdcardfs /data/media rw,fsuid=1023,fsgid=1023,gid=9997,multiuser,mask=7,derive_gid,default_normal,reserved=20MB,unshared_obb
+9669 9661 0:43 / /mnt/runtime/full/emulated rw,nosuid,nodev,noexec,noatime master:49 - sdcardfs /data/media rw,fsuid=1023,fsgid=1023,gid=9997,multiuser,mask=7,derive_gid,default_normal,reserved=20MB,unshared_obb
+9670 9661 0:44 / /mnt/mdfs/.hmdfs rw,relatime master:50 - hmdfs /data/misc_ce/0/kdfs/storage rw,sensitive,merge_enable,ra_pages=128,account=13948727301316847333,recv_uid=1023,cache_dir=/data/misc_ce/0/kdfs/cache/16448759908547494974,real_dst=/mnt/mdfs/.hmdfs,offline_stash,dentry_cache
+9671 9661 0:44 / /mnt/mdfs/account_trust rw,relatime master:50 - hmdfs /data/misc_ce/0/kdfs/storage rw,sensitive,merge_enable,ra_pages=128,account=13948727301316847333,recv_uid=1023,cache_dir=/data/misc_ce/0/kdfs/cache/16448759908547494974,real_dst=/mnt/mdfs/.hmdfs,offline_stash,dentry_cache
+9672 9661 0:45 / /mnt/mdfs/sdcard rw,relatime master:51 - hmdfs /data/media/0 rw,insensitive,merge_disable,ra_pages=128,account=13948727301316847333,recv_uid=1023,cache_dir=/data/misc_ce/0/kdfs/cache/16448759910518911873,real_dst=/mnt/mdfs/sdcard,offline_stash,dentry_cache
+9673 9661 0:46 / /mnt/mdfs/external_storage rw,relatime master:52 - hmdfs /mnt/media_rw rw,insensitive,merge_disable,ra_pages=128,account=13948727301316847333,recv_uid=1023,cache_dir=/data/misc_ce/0/kdfs/cache/14998924782874330279,real_dst=/mnt/mdfs/external_storage,no_offline_stash,dentry_cache,external_storage
+9674 9661 0:44 / /mnt/mdfs/13948727301316847333 rw,relatime master:50 - hmdfs /data/misc_ce/0/kdfs/storage rw,sensitive,merge_enable,ra_pages=128,account=13948727301316847333,recv_uid=1023,cache_dir=/data/misc_ce/0/kdfs/cache/16448759908547494974,real_dst=/mnt/mdfs/.hmdfs,offline_stash,dentry_cache
+9676 9638 0:22 / /apex rw,nosuid,nodev,noexec,relatime - tmpfs tmpfs rw,seclabel,size=3771152k,nr_inodes=942788,mode=755
+9677 9676 7:2 / /apex/com.android.apex.cts.shim@1 ro,nodev,noatime - ext4 /dev/block/loop2 ro,dirsync,seclabel
+9678 9676 7:2 / /apex/com.android.apex.cts.shim ro,nodev,noatime - ext4 /dev/block/loop2 ro,dirsync,seclabel
+9679 9676 7:3 / /apex/com.android.conscrypt@292103000 ro,nodev,noatime - ext4 /dev/block/loop3 ro,dirsync,seclabel
+9680 9676 7:3 / /apex/com.android.conscrypt ro,nodev,noatime - ext4 /dev/block/loop3 ro,dirsync,seclabel
+9681 9676 7:4 / /apex/com.android.media@292103023 ro,nodev,noatime - ext4 /dev/block/loop4 ro,dirsync,seclabel
+9682 9676 7:4 / /apex/com.android.media ro,nodev,noatime - ext4 /dev/block/loop4 ro,dirsync,seclabel
+9683 9676 7:5 / /apex/com.android.media.swcodec@292103019 ro,nodev,noatime - ext4 /dev/block/loop5 ro,dirsync,seclabel
+9684 9676 7:5 / /apex/com.android.media.swcodec ro,nodev,noatime - ext4 /dev/block/loop5 ro,dirsync,seclabel
+9685 9676 7:6 / /apex/com.android.resolv@292103001 ro,nodev,noatime - ext4 /dev/block/loop6 ro,dirsync,seclabel
+9686 9676 7:6 / /apex/com.android.resolv ro,nodev,noatime - ext4 /dev/block/loop6 ro,dirsync,seclabel
+9687 9676 7:7 / /apex/com.android.runtime@1 ro,nodev,noatime - ext4 /dev/block/loop7 ro,dirsync,seclabel
+9688 9676 7:7 / /apex/com.android.runtime ro,nodev,noatime - ext4 /dev/block/loop7 ro,dirsync,seclabel
+9689 9676 7:8 / /apex/com.android.tzdata@292103003 ro,nodev,noatime - ext4 /dev/block/loop8 ro,dirsync,seclabel
+9690 9676 7:8 / /apex/com.android.tzdata ro,nodev,noatime - ext4 /dev/block/loop8 ro,dirsync,seclabel
+9691 9638 259:29 / /metadata rw,nosuid,nodev,noatime master:9 - ext4 /dev/block/by-name/metadata rw,seclabel,discard,data=ordered
+9692 9638 253:6 / /cust ro,relatime master:10 - erofs /dev/block/dm-6 ro,seclabel,user_xattr,lz4asm
+9693 9638 253:7 / /hw_product ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9694 9638 253:8 / /odm ro,relatime master:12 - erofs /dev/block/dm-8 ro,seclabel,user_xattr,lz4asm
+9695 9638 253:9 / /preas ro,relatime master:13 - erofs /dev/block/dm-9 ro,seclabel,user_xattr,lz4asm
+9696 9638 253:10 / /preload ro,relatime master:14 - erofs /dev/block/dm-10 ro,seclabel,user_xattr,lz4asm
+9697 9638 253:11 / /vendor ro,relatime master:15 - erofs /dev/block/dm-11 ro,seclabel,user_xattr,lz4asm
+9698 9697 253:12 / /vendor/modem/modem_driver ro,relatime master:16 - ext4 /dev/block/dm-12 ro,seclabel,data=ordered
+9699 9697 253:13 / /vendor/preavs ro,relatime master:17 - erofs /dev/block/dm-13 ro,seclabel,user_xattr,lz4asm
+9700 9697 259:43 / /vendor/modem/modem_fw ro,relatime master:45 - ext4 /dev/block/by-name/modem_fw ro,context=u:object_r:modem_fw_file:s0,data=ordered
+9701 9638 253:14 / /version ro,relatime master:18 - ext4 /dev/block/dm-14 ro,seclabel,data=ordered
+9702 9638 0:26 / /acct rw,nosuid,nodev,noexec,relatime master:21 - cgroup none rw,cpuacct
+9703 9638 0:16 / /config rw,nosuid,nodev,noexec,relatime master:26 - configfs none rw
+9704 9638 8:55 / /sec_storage rw,nosuid,nodev,noatime master:35 - ext4 /dev/block/bootdevice/by-name/secure_storage rw,context=u:object_r:teecd_data_file:s0,discard,nodelalloc,data=journal
+9705 9638 259:2 / /splash2 rw,nosuid,nodev,noatime master:37 - ext4 /dev/block/by-name/splash2 rw,context=u:object_r:splash2_data_file:s0,data=ordered
+9706 9638 259:58 / /data rw,nosuid,nodev,noatime master:38 - f2fs /dev/block/by-name/userdata rw,seclabel,background_gc=on,discard,no_heap,user_xattr,inline_xattr,acl,inline_data,inline_dentry,extent_cache,mode=adaptive,inline_encrypt,sdp_encrypt,active_logs=6,alloc_mode=default,fsync_mode=posix
+9707 9706 253:5 /system/app/HwBehaviorAuth/HwBehaviorAuth.apk /data/app/com.huawei.behaviorauth-BAjFduIga6eU816ujRzU_w==/HwBehaviorAuth.apk ro,relatime master:1 - erofs /dev/block/dm-5 ro,seclabel,user_xattr,lz4asm
+9708 9706 253:7 /region_comm/china/app/HwHiAiEngine/voicekit.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/voicekit.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9709 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-facecluster-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-facecluster-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9710 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-facecompare-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-facecompare-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9711 9706 253:7 /region_comm/china/app/HwHiAiEngine/translation.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/translation.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9712 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-videomulti-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-videomulti-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9713 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-videosemantic-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-videosemantic-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9714 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-txtimagesr-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-txtimagesr-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9715 9706 253:7 /region_comm/china/app/HwHiAiEngine/compatible-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/compatible-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9716 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-screenshotocr-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-screenshotocr-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9717 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-headpose-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-headpose-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9718 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-segsemantic-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-segsemantic-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9719 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-tableocr-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-tableocr-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9720 9706 253:7 /region_comm/china/app/HwHiAiEngine/dm-ondeviceai.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/dm-ondeviceai.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9721 9706 253:7 /region_comm/china/app/HwHiAiEngine/asr-ondeviceai.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/asr-ondeviceai.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9722 9706 253:7 /region_comm/china/app/HwHiAiEngine/nlu-ondeviceai.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/nlu-ondeviceai.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9723 9706 253:7 /region_comm/china/app/HwHiAiEngine/tts.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/tts.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9724 9706 253:7 /region_comm/china/app/HwHiAiEngine/audio.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/audio.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9725 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-portraitseg-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-portraitseg-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9726 9706 253:7 /region_comm/china/app/HwHiAiEngine/computecapability-common.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/computecapability-common.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9727 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-videoanalysis-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-videoanalysis-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9728 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-faceparsing-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-faceparsing-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9729 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-labeldetect-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-labeldetect-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9730 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-focusocr-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-focusocr-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9731 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-scene-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-scene-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9732 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-multiobjectdetect-cpu-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-multiobjectdetect-cpu-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9733 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-sisr-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-sisr-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9734 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-facedetect-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-facedetect-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9735 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-barcode-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-barcode-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9736 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-carddetect-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-carddetect-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9737 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-aestheticsfull-cpu-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-aestheticsfull-cpu-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9738 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-docconverter-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-docconverter-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9739 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-labelobjectdetect-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-labelobjectdetect-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9740 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-facerating-cpu-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-facerating-cpu-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9741 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-faceattribute-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-faceattribute-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9742 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-facelandmark-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-facelandmark-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9743 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-clothing-orlando-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-clothing-orlando-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9744 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-docrefine-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-docrefine-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9745 9706 253:7 /region_comm/china/app/HwHiAiEngine/visionplugin-tracking-common-china-release.apk /data/app/com.huawei.hiai-cblbxQFgv8yLi6fpmIGPUw==/visionplugin-tracking-common-china-release.apk ro,relatime master:11 - erofs /dev/block/dm-7 ro,seclabel,user_xattr,lz4asm
+9746 9638 259:7 / /cache rw,nosuid,nodev,noatime master:39 - ext4 /dev/block/by-name/cache rw,seclabel,data=ordered
+9747 9638 0:38 / /system/product/priv-app ro,relatime master:41 - overlay overlay ro,seclabel,lowerdir=/preas/priv-app:/system/product/priv-app
+9748 9638 0:39 / /system/product/app ro,relatime master:42 - overlay overlay ro,seclabel,lowerdir=/preas/app:/system/product/app
+9749 9638 0:40 / /system/product/etc/permissions ro,relatime master:43 - overlay overlay ro,seclabel,lowerdir=/preas/china/permissions:/system/product/etc/permissions
+9750 9638 0:21 /runtime/default /storage rw,nosuid,nodev,noexec,relatime master:7 - tmpfs tmpfs rw,seclabel,size=3771152k,nr_inodes=942788,mode=755,gid=1000
+9751 9750 0:43 / /storage/emulated rw,nosuid,nodev,noexec,noatime master:49 - sdcardfs /data/media rw,fsuid=1023,fsgid=1023,gid=1015,multiuser,mask=6,derive_gid,default_normal,reserved=20MB,unshared_obb
+9752 9750 0:21 /user/0 /storage/self rw,nosuid,nodev,noexec,relatime master:7 - tmpfs tmpfs rw,seclabel,size=3771152k,nr_inodes=942788,mode=755,gid=1000
+1267 9661 0:47 / /mnt/mdfs/groups rw,nosuid,nodev,relatime master:53 - fuse mdfs rw,user_id=0,group_id=0,allow_other

@@ -54,7 +54,10 @@ import cn.leancloud.LCRanking;
 import cn.leancloud.LCStatistic;
 import cn.leancloud.LCStatisticResult;
 import io.reactivex.Observer;
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.Disposable;
+import io.reactivex.schedulers.Schedulers;
 
 
 public class GameActivity extends AppCompatActivity implements View.OnClickListener, CompoundButton.OnCheckedChangeListener{
@@ -207,7 +210,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
 
-    // 再按一次退出程序(如果两次按退出按钮的时间间隔小于2秒就执行退出操作)
+    // 再按一次退出程序(如果两次按退出按钮的时间间隔小于 2 秒就执行退出操作)
     private long exitTime = 0;
 
     @Override
@@ -301,6 +304,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
             }
         });
     }
+
 
     public void getCloudLeaderboard(){
         LCLeaderboard leaderboard = LCLeaderboard.createWithoutData("score_leejieun");
@@ -398,7 +402,7 @@ public class GameActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void logout (){
-        TDSUser.logOut();
+//        TDSUser.logOut();
         AntiAddictionUIKit.logout();
     }
 
